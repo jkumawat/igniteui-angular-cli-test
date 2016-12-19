@@ -5,9 +5,40 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 
+import {
+  IgDatePickerComponent,
+  IgCurrencyEditorComponent,
+  IgDateEditorComponent,
+  IgMaskEditorComponent,
+  IgNumericEditorComponent,
+  IgPercentEditorComponent,
+  IgTextEditorComponent,
+  IgComboComponent,
+  IgGridComponent,
+  IgHierarchicalGridComponent,
+  IgPivotGridComponent,
+  IgTreeGridComponent
+} from 'igniteui-angular2';
+
+const igniteuiComponents = [
+  IgDatePickerComponent,
+  IgCurrencyEditorComponent,
+  IgDateEditorComponent,
+  IgMaskEditorComponent,
+  IgNumericEditorComponent,
+  IgPercentEditorComponent,
+  IgTextEditorComponent,
+  IgComboComponent,
+  IgGridComponent,
+  IgHierarchicalGridComponent,
+  IgPivotGridComponent,
+  IgTreeGridComponent
+];
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ...igniteuiComponents
   ],
   imports: [
     BrowserModule,

@@ -1,3 +1,91 @@
 <h1>
   {{title}}
 </h1>
+
+
+<table id="" class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Control Name</th>
+      <th>HTML Element</th>
+      <th>Ignite UI Control</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>igCurrencyEditor</td>
+      <td><input class="form-control" type="number" [(ngModel)]="editors.currency" /></td>
+      <td>
+        <ig-currency-editor [(ngModel)]="editors.currency" [options]="{width:'100%'}"></ig-currency-editor>
+      </td>
+    </tr>
+    <tr>
+      <td>igDateEditor</td>
+      <td><input class="form-control" type="text" [(ngModel)]="editors.date" /></td>
+      <td>
+        <ig-date-editor [(ngModel)]="editors.date" [options]="{width:'100%'}"></ig-date-editor>
+      </td>
+    </tr>
+    <tr>
+      <td>igMaskEditor</td>
+      <td><input class="form-control" type="text" [(ngModel)]="editors.mask" /></td>
+      <td>
+        <ig-mask-editor [(ngModel)]="editors.mask" [options]="{width:'100%', inputMask:'999-999-999'}"></ig-mask-editor>
+      </td>
+    </tr>
+    <tr>
+      <td>igNumericEditor</td>
+      <td><input class="form-control" type="number" [(ngModel)]="editors.currency" /></td>
+      <td>
+        <ig-numeric-editor [(ngModel)]="editors.currency" [options]="{width:'100%', buttonType:'spin'}"></ig-numeric-editor>
+      </td>
+    </tr>
+    <tr>
+      <td>igPercentEditor</td>
+      <td><input type="number" class="form-control" [(ngModel)]="editors.percent" /></td>
+      <td>
+        <ig-percent-editor [(ngModel)]="editors.percent" [options]="{width:'100%'}"></ig-percent-editor>
+      </td>
+    </tr>
+    <tr>
+      <td>igTextEditor</td>
+      <td><input class="form-control" type="text" id="editor11" [(ngModel)]="editors.text" /></td>
+      <td>
+        <ig-text-editor widgetId="editor1" [(ngModel)]="editors.text" [options]="{width:'100%'}"></ig-text-editor>
+      </td>
+    </tr>
+    <tr>
+      <td>igDatePicker</td>
+      <td><input class="form-control" type="text" id="datePicker11" [(ngModel)]="editors.date" /></td>
+      <td>
+        <ig-date-picker widgetId="datePicker1" [(ngModel)]="editors.date" [options]="{width:'100%'}"></ig-date-picker>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<!--<div>
+  <h3>Combo control</h3>
+
+
+  <div class="row">
+    <div class="col-sm-2">
+      <input id="product-id" class="form-control" type="text" [(ngModel)]="combo.value1" />
+      <div class="text-sm text-muted text-right">values: 1 - 20</div>
+    </div>
+    <div class="col-sm-3 col-md-2">
+      <ig-combo id="'combo1'" [(options)]="options" [(ngModel)]="combo.value1">
+      </ig-combo>
+
+    </div>
+  </div>
+</div>-->
+
+<h3>Ig Grid Sample</h3>
+<button type="button" (click)="loadGrid($event)"> Load Grid</button>
+<button type="button" (click)="loadData($event)"> Load Data</button>
+
+<div *ngIf="gridReady" style="width:500px;">
+<ig-grid [(options)]="gridOptions" [(widgetId)]='id' (dataRendering)="dataRenderingHandle($event,$ui)"></ig-grid>
+</div>

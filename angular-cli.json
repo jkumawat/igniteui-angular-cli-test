@@ -25,8 +25,9 @@
       "scripts": [
         "../node_modules/jquery/dist/jquery.js",
         "assets/scripts/jquery-ui/jquery-ui.min.js",
-        "../node_modules/ignite-ui/js/infragistics.core-lite.js",
-        "../node_modules/ignite-ui/js/infragistics.lob-lite.js"
+        "assets/scripts/igniteui/infragistics.core.js",
+        "assets/scripts/igniteui/infragistics.dv.js",
+        "assets/scripts/igniteui/infragistics.lob.js"
       ],
       "environments": {
         "source": "environments/environment.ts",

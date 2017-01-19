@@ -65,14 +65,14 @@
 </table>
 
 
-<!--<div>
+<div>
   <h3>Combo control</h3>
 
 
   <div class="row">
     <div class="col-sm-2">
       <input id="product-id" class="form-control" type="text" [(ngModel)]="combo.value1" />
-      <div class="text-sm text-muted text-right">values: 1 - 20</div>
+      <div class="text-sm text-muted text-right">values: 1 - 3</div>
     </div>
     <div class="col-sm-3 col-md-2">
       <ig-combo id="'combo1'" [(options)]="options" [(ngModel)]="combo.value1">
@@ -80,31 +80,21 @@
 
     </div>
   </div>
-</div>-->
+</div>
 
 <h3>Ig Grid Sample</h3>
 <button type="button" (click)="loadGrid($event)"> Load Grid</button>
-<button type="button" (click)="loadData($event)"> Load Data</button>
 
 <div *ngIf="gridReady">
-  <ig-grid [(options)]="gridOptions"
-  [(dataSource)]="gridObject.results" [(widgetId)]='id' 
-  (dataRendering)="dataRenderingHandle($event,$ui)" 
-  (dataBind)="dataBindHandler($event)"
-  (cellClick)="cellRightClick($event, $ui)"></ig-grid>
-  <div id="grid-footer" style="    display: flex;    flex-direction: row;    padding: 5px;    background: #999;    color: white;     font-weight: 400; font-size: 1.2em;   height: 1.6em;    align-items: center;    font-family: 'Segoe UI,Arial,sans-serif';">
-<div style="flex: 1;">
-<span class="footerTextSpan" for="pageSizeSelect">Show results</span>
-<select id="pageSizeSelect" (change)="onPageSizeChage($event.target.value)">
-                                    <option *ngFor="let rpp of recordsPerPage" [value]="rpp">{{rpp}}</option>
-                                </select>
+  <ig-grid [(options)]="gridOptions" [(dataSource)]="griddata" [(widgetId)]='id' (dataRendering)="dataRenderingHandle($event,$ui)"
+    (rendered)="rendered($event,$ui)"></ig-grid>
 </div>
-<div>
-  <span class="footerTextSpan">Page</span>
-  <select (change)="onPageSelectionChage($event.target.value)">
-                                    <option *ngFor="let page of totalPages" [value]="page" [attr.selected]="selectedPage==page ? true : null">{{page}}</option>
-                                </select>
-  <span class="footerTextSpan">of {{totalPagesCount}}</span>
-</div>
-</div>
+
+
+<h3>Ig Hierarchical Grid Sample</h3>
+<button type="button" (click)="loadHierarchicalGrid($event)"> Load Grid</button>
+<button type="button" (click)="loadHierarchicalData($event)"> Load Data</button>
+
+<div *ngIf="hierarchicalGridReady">
+  <ig-hierarchical-grid [(options)]="hierarchicalGridOptions" [(widgetId)]='hierarchicalGridID' ></ig-hierarchical-grid>
 </div>

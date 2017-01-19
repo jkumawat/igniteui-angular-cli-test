@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TeamAssignmentModel, TeamGridModel } from './hierarchical-grid-model';
 
 @Component({
   selector: 'app-root',
@@ -20,19 +21,15 @@ export class AppComponent {
   private gridOptions: IgGrid;
   private id: string;
   private gridReady: boolean = false;
-  gridObject: any = {
-    results: [] = []
-  };
+  private griddata: Array<any> = new Array<any>();
   private rowId: number = 0;
+  private gridControl: any;
 
-  // paging
-  private totalPages: number[] = [];
-  private totalPagesCount: number = 0;
-  private calcPaging: boolean = false;
-  private pageSize: number = 5;
-  private selectedPage: number = 1;
-  private recordsPerPage: number[] = [5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-
+  // hierarchical Grid
+  private hierarchicalGridOptions: IgHierarchicalGrid;
+  private hierarchicalGridID: string;
+  private hierarchicalGridReady: boolean = false;
+  private hierarchicalGridData: Array<TeamGridModel> = new Array<TeamGridModel>();
 
   constructor() {
     // code for Editors
@@ -46,61 +43,38 @@ export class AppComponent {
       text: 'Ignite UI'
     };
 
-    // Code For Combo
-    this.northwind = [];
+    // Code For Combo    
+    this.northwind = [
+      { RecordId: 1, RecordName: 'Test -1' },
+      { RecordId: 2, RecordName: 'Test -2' },
+      { RecordId: 3, RecordName: 'Test -3' },
+    ];
 
     this.options = {
-      valueKey: 'ProductID',
-      textKey: 'ProductName',
+      valueKey: 'RecordId',
+      textKey: 'RecordName',
       dataSource: this.northwind,
       width: '100%'
     };
 
     this.combo = {
-      value1: 20,
-      value2: 'Chang'
+      value1: 1,
+      value2: 'Test'
     };
-
-
   }
-
 
   public loadGrid(event: any) {
     this.initGridData();
-    this.dataBindHandler(event, null);
-    this.initPaging();
     this.gridReady = true;
   }
 
-  public initPaging() {
-    if (this.gridObject.results !== undefined && this.gridObject.results.length > 0) {
-      this.totalPagesCount = Math.ceil(this.gridObject.results.length / this.pageSize);
-      this.totalPages = [];
-      for (let i = 1; i <= this.totalPagesCount; i++) {
-        this.totalPages.push(i);
-      }
-    }
-  }
-
-  cellRightClick(event: any, ui: any) {
-    console.log(event);
-    if (event.ui.row) {
-      let selectedRow: any = {
-        RecordId: event.ui.row[event.ui.rowKey].childNodes[0].innerText,
-        RecordName: event.ui.row[event.ui.rowKey].childNodes[1].innerText,
-        RecordDescription: event.ui.row[event.ui.rowKey].childNodes[2].innerText
-      };
-
-      console.log(selectedRow);
-    }
-  }
-
-  dataRenderingHandle(event: any, ui: any) {
+  public dataRenderingHandle(event: any, ui: any) {
 
     if (event) {
       let colArray: Array<any> = event.ui.owner.options.columns;
 
       colArray.forEach(item => {
+        if (item.key === 'RecordId') { item.hidden = true; }
         if (item.key === 'Type') { item.hidden = true; }
         if (item.key === 'Link') { item.hidden = true; }
         if (item.key === 'Fragments') { item.hidden = true; }
@@ -108,31 +82,29 @@ export class AppComponent {
     }
   }
 
-  public loadData(event: any) {
+  public rendered(event, ui) {
+    this.gridControl = event.ui.owner;
 
-    this.gridObject.results = [];
-    for (let i = 0; i < this.pageSize; i++) {
-      this.gridObject.results.push({
-        RecordId: ++this.rowId,
-        RecordName: 'test ' + this.rowId,
-        RecordDescription: 'test description',
-        Fragments: 1, Link: null, Type: null
-      });
+    let localGridControlInstance = this.gridControl;
 
-      let ui: any;
-      this.dataBindHandler(event, ui);
-    }
+    localGridControlInstance.container().on('dblclick', function (gridEvt: any, gridUI: any) {
+      let rowId = gridEvt.originalEvent.target.parentElement.getAttribute('data-id');
+      let rowObject = localGridControlInstance.findRecordByKey(rowId);
+      alert('double click event handler');
+    });
 
-    this.initPaging();
+    localGridControlInstance.igGridUpdating("setCellValue", 1, "RecordName", "Sue");
+
+    console.log(this.gridControl);
   }
 
   public initGridData() {
 
     this.id = 'MySample-Grid';
 
-    this.gridObject.results = [];
-    for (let i = 0; i < this.pageSize; i++) {
-      this.gridObject.results.push({
+    this.griddata = [];
+    for (let i = 0; i < 5; i++) {
+      this.griddata.push({
         RecordId: ++this.rowId,
         RecordName: 'test ' + this.rowId,
         RecordDescription: 'test description',
@@ -148,17 +120,22 @@ export class AppComponent {
       autoCommit: true,
       autoGenerateColumns: true,
       primaryKey: 'RecordId',
+
       features: [
         {
           name: 'Updating',
-          editMode: 'none',
-          rowAdded: function (evt: any, ui: any) {
-            console.log('Row Added Event fired');
+          editRowStarting: function (evt: any, ui: any) {
+            console.log('Here i can call a method to open Selection Dialog');
+            return true;
           },
           rowAdding: function (evt: any, ui: any) {
-            console.log('row addind function called');
-            return false;
-          }
+            console.log('Here i can call a method to add data in RowData for row adding.');
+            return true;
+          },
+          rowDeleting: function (evt: any, ui: any) {
+            console.log('Here i can call a method to update rowData for deleting rows.');
+            return true;
+          },
         },
         {
           name: 'Filtering'
@@ -173,23 +150,55 @@ export class AppComponent {
     };
   }
 
-  public dataBindHandler(event, ui) {
-    // event handler code    
-    let newGridOptions = this.gridOptions;
-    newGridOptions.dataSource = this.gridObject.results;
-    this.gridOptions = newGridOptions;
+
+  public loadHierarchicalGrid(event: any) {
+    this.hierarchicalGridID = 'MyHierarchicalGrid';
+
+    this.hierarchicalGridOptions = {
+      autoCommit: true,
+      width: '100%',
+      height: '400px',
+      dataSource: this.hierarchicalGridData,
+      primaryKey: 'roleId',
+      autoGenerateColumns: false,
+      autoGenerateColumnLayouts: false,
+      columns: [
+        { key: 'roleId', headerText: 'Role Id', dataType: 'number', hidden: true },
+        { key: 'roleName', headerText: 'Role Name', dataType: 'string' },
+      ],
+      columnLayouts: [
+        {
+          key: 'assignments',
+          responseDataKey: '',
+          primaryKey: 'userName',
+          autoGenerateColumns: false,
+          width: '100%',
+          columns: [
+            { key: 'userName', headerText: 'User Name', dataType: 'string', hidden: true },
+            { key: 'name', headerText: 'Name', dataType: 'string' },
+            { key: 'surName', headerText: 'Surname', dataType: 'string' },
+            { key: 'givenName', headerText: 'Given Name', dataType: 'string' },
+            { key: 'department', headerText: 'Department', dataType: 'string' }
+          ]
+        }
+      ]
+    };
+
+    this.hierarchicalGridReady = true;
   }
 
-  public onPageSizeChage(newPageSize: number, masterSearchKey: string): void {
-    this.pageSize = newPageSize;
-    this.selectedPage = 1;
-    this.calcPaging = true;
+  public loadHierarchicalData(event: any) {
+    for (let i = 1; i < 5; i++) {
+      let newModel: TeamGridModel = new TeamGridModel();
+      newModel.roleId = i;
+      newModel.roleName = 'Role No.' + i;
+      newModel.assignments = new Array<TeamAssignmentModel>();
+      for (let assign = 0; assign <= i; assign++) {
+        let newAssignment: TeamAssignmentModel = new TeamAssignmentModel(assign);
+        newModel.assignments.push(newAssignment);
+      }
 
-    let event: any;
-    this.loadData(event);
-  }
-
-  public onPageSelectionChage(selectedPage: any): void {
-    this.selectedPage = selectedPage;
+      this.hierarchicalGridData.push(newModel);
+    }
   }
 }

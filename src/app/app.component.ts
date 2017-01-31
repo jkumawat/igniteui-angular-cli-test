@@ -24,6 +24,7 @@ export class AppComponent {
   private griddata: Array<any> = new Array<any>();
   private rowId: number = 0;
   private gridControl: any;
+  private gridWidget: any;
 
   // hierarchical Grid
   private hierarchicalGridOptions: IgHierarchicalGrid;
@@ -83,7 +84,13 @@ export class AppComponent {
   }
 
   public rendered(event, ui) {
+    console.log(ui);
     this.gridControl = event.ui.owner;
+
+    if (ui) {
+      this.gridWidget = ui.owner.widget();
+    }
+
 
     let localGridControlInstance = this.gridControl;
 
@@ -93,7 +100,7 @@ export class AppComponent {
       alert('double click event handler');
     });
 
-    localGridControlInstance.igGridUpdating("setCellValue", 1, "RecordName", "Sue");
+    // localGridControlInstance.igGridUpdating("setCellValue", 1, "RecordName", "Sue");
 
     console.log(this.gridControl);
   }

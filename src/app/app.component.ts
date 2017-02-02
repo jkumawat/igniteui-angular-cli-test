@@ -16,6 +16,7 @@ export class AppComponent {
   public options: IgCombo;
   public northwind: any;
   public combo: any;
+  public comboValue: number;
 
   // Grid
   private gridOptions: IgGrid;
@@ -54,7 +55,6 @@ export class AppComponent {
     this.options = {
       valueKey: 'RecordId',
       textKey: 'RecordName',
-      dataSource: this.northwind,
       width: '100%'
     };
 
@@ -62,6 +62,9 @@ export class AppComponent {
       value1: 1,
       value2: 'Test'
     };
+  }
+  public AddComboData(event: Event) {
+    this.northwind.push({ RecordId: this.northwind.length + 1, RecordName: 'Test -' + (this.northwind.length + 1) });
   }
 
   public loadGrid(event: any) {
@@ -176,7 +179,6 @@ export class AppComponent {
       columnLayouts: [
         {
           key: 'assignments',
-          responseDataKey: '',
           primaryKey: 'userName',
           autoGenerateColumns: false,
           width: '100%',

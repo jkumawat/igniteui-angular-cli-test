@@ -19,7 +19,7 @@
       "mobile": false,
       "styles": [
         "../node_modules/ignite-ui/css/structure/infragistics.css",
-        "../node_modules/ignite-ui/css/themes/infragistics/infragistics.theme.css",
+         "../node_modules/ignite-ui/css/themes/infragistics/infragistics.theme.css",    
         "styles.css"
       ],
       "scripts": [

@@ -89,10 +89,7 @@ export class AppComponent {
   public rendered(event, ui) {
     console.log(ui);
     this.gridControl = event.ui.owner;
-
-    if (ui) {
-      this.gridWidget = ui.owner.widget();
-    }
+    this.gridWidget = event.ui.owner.widget();
 
 
     let localGridControlInstance = this.gridControl;
@@ -103,7 +100,7 @@ export class AppComponent {
       alert('double click event handler');
     });
 
-    // localGridControlInstance.igGridUpdating("setCellValue", 1, "RecordName", "Sue");
+    this.gridWidget.igGridUpdating("setCellValue", 1, "RecordName", "Sue");
 
     console.log(this.gridControl);
   }
@@ -146,6 +143,9 @@ export class AppComponent {
             console.log('Here i can call a method to update rowData for deleting rows.');
             return true;
           },
+        },
+        {
+          name: 'Paging'
         },
         {
           name: 'Filtering'

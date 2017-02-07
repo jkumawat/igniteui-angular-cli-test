@@ -1,3 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 
+.ui-iggrid-header ui-widget-header{
+    background: #dcdcdc;
+    color:black;
+}
 
+
+/*this class for alternative row*/
+.ui-ig-altrecord .ui-iggrid-altrecord{
+
+    background: #f0f0f0;
+}
